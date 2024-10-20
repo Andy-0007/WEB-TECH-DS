@@ -1,0 +1,113 @@
+Q.1) Write a menu driven program to perform the following stack related operations: a) Insert an element in stack b) Delete an element from stack c) Display the contents of stack
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Operations</title>
+</head>
+<body>
+
+<h2>Stack Operations Menu</h2>
+
+<form method="POST" action="">
+    <h3>Select an operation:</h3>
+    <input type="radio" name="operation" value="insert" checked> Insert Element<br>
+    <input type="radio" name="operation" value="delete"> Delete Element<br>
+    <input type="radio" name="operation" value="display"> Display Stack<br><br>
+
+    <label for="element">Element (for Insert/Delete):</label><br>
+    <input type="text" name="element"><br><br>
+
+    <input type="submit" value="Submit">
+</form>
+
+<?php
+session_start();
+
+// Initialize the stack in the session
+if (!isset($_SESSION['stack'])) {
+    $_SESSION['stack'] = [];
+}
+
+// Process the submitted form
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $operation = $_POST['operation'];
+    $element = $_POST['element'];
+
+    switch ($operation) {
+        case 'insert':
+            // Insert element into the stack
+            if (!empty($element)) {
+                array_push($_SESSION['stack'], $element);
+                echo "<p>Element '$element' inserted into the stack.</p>";
+            } else {
+                echo "<p>Please enter a valid element to insert.</p>";
+            }
+            break;
+
+        case 'delete':
+            // Delete element from the stack (LIFO)
+            if (!empty($_SESSION['stack'])) {
+                $removedElement = array_pop($_SESSION['stack']);
+                echo "<p>Element '$removedElement' deleted from the stack.</p>";
+            } else {
+                echo "<p>The stack is empty. No element to delete.</p>";
+            }
+            break;
+
+        case 'display':
+            // Display the contents of the stack
+            if (!empty($_SESSION['stack'])) {
+                echo "<p>Current Stack: " . implode(', ', $_SESSION['stack']) . "</p>";
+            } else {
+                echo "<p>The stack is currently empty.</p>";
+            }
+            break;
+    }
+}
+?>
+
+</body>
+</html>
+
+Q.2) Dataset Name: winequality-red.csv [15] Write a program in python to perform following task a. Rescaling: Normalised the dataset using MinMaxScaler class b. Standardizing Data (transform them into a standard Gaussian distribution with a mean of 0 and a standard deviation of 1) c. Binarizing Data using we use the Binarizer class (Using a binary threshold, it is possible to transform our data by marking the values above it 1 and those equal to or below it, 0)
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, Binarizer
+
+# Load the dataset
+df = pd.read_csv('winequality-red.csv')
+
+# Display the first few rows of the dataset
+print("Original Dataset:")
+print(df.head())
+
+# a. Rescaling: Normalize the dataset using MinMaxScaler
+minmax_scaler = MinMaxScaler()
+normalized_data = minmax_scaler.fit_transform(df)
+
+# Convert normalized data back to DataFrame for better readability
+normalized_df = pd.DataFrame(normalized_data, columns=df.columns)
+print("\nNormalized Dataset (Min-Max Scaling):")
+print(normalized_df.head())
+
+# b. Standardizing Data
+standard_scaler = StandardScaler()
+standardized_data = standard_scaler.fit_transform(df)
+
+# Convert standardized data back to DataFrame
+standardized_df = pd.DataFrame(standardized_data, columns=df.columns)
+print("\nStandardized Dataset (Mean = 0, Std = 1):")
+print(standardized_df.head())
+
+# c. Binarizing Data
+# Using a threshold of 5.0 for binarization (you can adjust this as needed)
+binarizer = Binarizer(threshold=5.0)
+binarized_data = binarizer.fit_transform(df)
+
+# Convert binarized data back to DataFrame
+binarized_df = pd.DataFrame(binarized_data, columns=df.columns)
+print("\nBinarized Dataset (Threshold = 5.0):")
+print(binarized_df.head())
+
+
